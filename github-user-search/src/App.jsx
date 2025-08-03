@@ -17,10 +17,14 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <div>
-      <h1 style={{ textAlign: "center" }}>GitHub User Search</h1>
-      <SearchUser />
-    </div>
+
+      <div className="min-h-screen bg-gray-100 p-4">
+        <h1 className="text-4xl font-bold text-center text-blue-600 mb-6">
+          GitHub User Search
+        </h1>
+        <SearchUser />
+      </div>
+
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
@@ -30,6 +34,7 @@ function App() {
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
       </div>
+
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
