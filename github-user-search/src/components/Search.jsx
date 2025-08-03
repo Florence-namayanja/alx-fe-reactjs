@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { fetchUserData } from "../services/githubService";
+import { fetchAdvancedUserData } from "../services/githubService";
 
-function SearchUser() {
+function Search() {
   const [username, setUsername] = useState("");
-  const [user, setUser] = useState(null);
+  const [location, setLocation] = useState("");
+  const [minRepos, setMinRepos] = useState("");
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -11,11 +13,9 @@ function SearchUser() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setUser(null);
-
     try {
-      const userData = await fetchUserData(username);
-      setUser(userData);
+      const data = await fetchAdvancedUserData(username, location, minRepos);
+      setResults(data.items);
     } catch (err) {
       setError("Looks like we cant find the user");
     } finally {
@@ -24,37 +24,58 @@ function SearchUser() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <form onSubmit={handleSearch}>
+    <div className="p-4 max-w-xl mx-auto">
+      <form onSubmit={handleSearch} className="space-y-4">
         <input
           type="text"
-          placeholder="Enter GitHub username"
+          placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          style={{ padding: "8px", width: "250px" }}
+          className="w-full p-2 border rounded"
         />
-        <button type="submit" style={{ marginLeft: "10px", padding: "8px" }}>
+        <input
+          type="text"
+          placeholder="Location (optional)"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="number"
+          placeholder="Min Repos (optional)"
+          value={minRepos}
+          onChange={(e) => setMinRepos(e.target.value)}
+          className="w-full p-2 border rounded"
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
           Search
         </button>
       </form>
 
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
-      {user && (
-        <div style={{ marginTop: "20px" }}>
-          <img
-            src={user.avatar_url}
-            alt={user.login}
-            style={{ width: "100px", borderRadius: "50%" }}
-          />
-          <h3>{user.name || user.login}</h3>
-          <a href={user.html_url} target="_blank" rel="noreferrer">
-            View Profile
-          </a>
-        </div>
-      )}
+      {loading && <p className="mt-4 text-gray-600">Loading...</p>}
+      {error && <p className="mt-4 text-red-500">{error}</p>}
+
+      <div className="mt-6 space-y-4">
+        {results.map((user) => (
+          <div key={user.id} className="p-4 border rounded shadow">
+            <img src={user.avatar_url} alt={user.login} className="w-16 h-16 rounded-full" />
+            <h2 className="text-xl font-bold">{user.login}</h2>
+            <a
+              href={user.html_url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-500 underline"
+            >
+              View Profile
+            </a>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
-export default SearchUser;
+export default Search;
