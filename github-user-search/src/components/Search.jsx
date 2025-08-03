@@ -7,17 +7,23 @@ function Search() {
   const [minRepos, setMinRepos] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(false);
 
   const handleSearch = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError(false);
+    setResults([]);
+
     try {
       const data = await fetchAdvancedUserData(username, location, minRepos);
-      setResults(data.items);
+      if (data.items.length === 0) {
+        setError(true);
+      } else {
+        setResults(data.items);
+      }
     } catch (err) {
-      setError("Looks like we cant find the user");
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -56,12 +62,18 @@ function Search() {
       </form>
 
       {loading && <p className="mt-4 text-gray-600">Loading...</p>}
-      {error && <p className="mt-4 text-red-500">{error}</p>}
+      {error && (
+        <p className="mt-4 text-red-500">Looks like we cant find the user</p>
+      )}
 
       <div className="mt-6 space-y-4">
         {results.map((user) => (
           <div key={user.id} className="p-4 border rounded shadow">
-            <img src={user.avatar_url} alt={user.login} className="w-16 h-16 rounded-full" />
+            <img
+              src={user.avatar_url}
+              alt={user.login}
+              className="w-16 h-16 rounded-full"
+            />
             <h2 className="text-xl font-bold">{user.login}</h2>
             <a
               href={user.html_url}
