@@ -1,19 +1,21 @@
 import React from "react";
+import "./UserProfile.css"; // External CSS for styles
 
-function UserProfile() {
+const UserProfile = ({ user }) => {
   return (
-    <div className="bg-gray-100 p-4 md:p-8 max-w-xs md:max-w-sm mx-auto my-20 rounded-lg shadow-lg">
-      <img
-        className="rounded-full w-24 h-24 md:w-36 md:h-36 mx-auto"
-        src="https://via.placeholder.com/150"
-        alt="User"
-      />
-      <h1 className="text-lg md:text-xl text-blue-800 my-4">John Doe</h1>
-      <p className="text-gray-600 text-sm md:text-base">
-        Developer at Example Co. Loves to write code and explore new technologies.
-      </p>
+    <div className="user-profile-container">
+      <div className="user-profile-card">
+        <img
+          src={user.avatar || "https://via.placeholder.com/150"}
+          alt={user.name}
+          className="user-profile-avatar"
+        />
+        <h1 className="user-profile-name">{user.name}</h1>
+        <p className="user-profile-email">{user.email}</p>
+        <p className="user-profile-bio">{user.bio}</p>
+      </div>
     </div>
   );
-}
+};
 
 export default UserProfile;
