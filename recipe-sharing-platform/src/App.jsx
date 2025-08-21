@@ -6,10 +6,15 @@ import HomePage from './components/HomePage'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import RecipeDetail from './components/RecipeDetail'
 import RecipeList from './components/RecipeList'
+import AddRecipeForm from './components/AddRecipeForm'
 
 
 
 function App() {
+  const handleAddRecipe = (recipe) => {
+    console.log('New recipe added:', recipe)
+
+  };
   
 
   return (
@@ -24,6 +29,9 @@ function App() {
           <Route path='/recipe/:id' element={<RecipeDetail />} />
         </Routes>
       </Router>
+      <div>
+        <AddRecipeForm onAddRecipe={handleAddRecipe} />
+      </div>
     </>
   )
 }
