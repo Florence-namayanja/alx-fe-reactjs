@@ -1,11 +1,6 @@
-import { useState } from "react";
-
 export function useAuth() {
-  // Fake authentication state
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Simple fake authentication
+  const isAuthenticated = true; // change to false to test redirect
 
-  const login = () => setIsAuthenticated(true);
-  const logout = () => setIsAuthenticated(false);
-
-  return { isAuthenticated, login, logout };
+  return { isAuthenticated };
 }
